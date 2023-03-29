@@ -4,10 +4,12 @@ import android.graphics.Rect
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -24,6 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import ru.dars.darsapp.R
 import ru.dars.darsapp.ui.theme.Typography
+
+/**
+ * Services cards
+ */
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -139,3 +145,58 @@ fun eventIsInside(event: MotionEvent, left: Int, top: Int, width: Int, height: I
 }
 
 const val SCALE_FACTOR = 0.98f
+
+/**
+ * Address items
+ */
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun CardWithTextAndNext(
+    title: String = "Title",
+    message: String = "Message",
+    onClickAction: () -> Unit = {}
+) {
+    Card(
+        onClick = onClickAction,
+        shape = RoundedCornerShape(22.dp),
+        backgroundColor = colorResource(R.color.colorWhite),
+        modifier = Modifier
+            .height(110.dp)
+            .fillMaxWidth()
+    ) {
+        ConstraintLayout {
+            val (titleText, messageText, cardImage) = createRefs()
+
+            Text(text = title,
+                style = Typography.body1,
+                color = colorResource(R.color.colorBlack),
+                modifier = Modifier.constrainAs(titleText) {
+                    top.linkTo(parent.top, margin = 16.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                }
+            )
+
+            Text(text = message,
+                style = Typography.body2,
+                color = colorResource(R.color.colorGrayText),
+                modifier = Modifier
+                    .constrainAs(messageText) {
+                        top.linkTo(titleText.bottom, margin = 16.dp)
+                        start.linkTo(titleText.start)
+                    }
+                    .padding(end = 16.dp)
+            )
+
+            Image(painterResource(R.drawable.ic_orange_arrow_next),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.constrainAs(cardImage) {
+                    end.linkTo(parent.end, margin = 16.dp)
+                    bottom.linkTo(parent.bottom, margin = 35.dp)
+                    top.linkTo(parent.top, margin = 35.dp)
+                }
+            )
+        }
+    }
+}
