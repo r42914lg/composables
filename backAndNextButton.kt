@@ -1,16 +1,17 @@
 package ru.dars.darsapp.core.ui.compose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -29,47 +30,60 @@ fun BackAndNextButton(
     onBack: () -> Unit = {},
 ) {
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Image(
-            painterResource(R.drawable.ic_previous),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
+    val interactionSource = MutableInteractionSource()
+
+    Row {
+
+        Box(
             modifier = Modifier
-                .padding(end = 16.dp)
-                .clickable { onBack() }
-        )
+                .size(50.dp)
+                .clip(RoundedCornerShape(30))
+                .background(colorResource(R.color.textFieldBackgroundDefault))
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { onBack() }
+        ) {
+            Image(
+                painterResource(R.drawable.ic_previous),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
-        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-            Button(
-                enabled = isEnabled,
-                shape = RoundedCornerShape(30),
-                onClick = { onClickAction() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(R.color.colorBlue)),
+            Box(
                 modifier = modifier
-                    .fillMaxWidth()
                     .height(50.dp)
-                    .padding(start = 16.dp, end = 16.dp)
+                    .width(164.dp)
+                    .clip(RoundedCornerShape(30))
+                    .background(colorResource(R.color.colorBlue))
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        if (isEnabled)
+                            onClickAction()
+                    }
 
             ) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Row {
                     Text(
                         text = buttonText,
                         style = Typography.button,
-                        color = colorResource(R.color.colorWhite)
+                        color = colorResource(R.color.colorWhite),
+                        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 15.dp, bottom = 15.dp)
                     )
                     Image(
                         painterResource(R.drawable.ic_next),
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.padding(end = 16.dp)
+                        colorFilter = ColorFilter.tint(color = colorResource(R.color.colorWhite)),
+                        modifier = Modifier.padding(end = 18.dp, top = 15.dp, bottom = 15.dp)
                     )
                 }
             }
         }
-    }
 }

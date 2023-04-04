@@ -10,6 +10,7 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -45,7 +46,9 @@ fun IconTextNextItem(
         Text(text = text,
             style = Typography.body2,
             color = colorResource(R.color.colorBlack),
-            modifier = Modifier.weight(1.0f).padding(end = 16.dp, start = 16.dp)
+            modifier = Modifier
+                .weight(1.0f)
+                .padding(end = 16.dp, start = 16.dp)
         )
 
         Image(painterResource(R.drawable.ic_orange_arrow_next),
@@ -65,6 +68,7 @@ fun IconTextSwitchItem(
     checkedStateInit: Boolean = false,
     onClickAction: (isOn: Boolean) -> Unit = {}
 ) {
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -78,20 +82,65 @@ fun IconTextSwitchItem(
         Text(text = text,
             style = Typography.body2,
             color = colorResource(R.color.colorBlack),
-            modifier = Modifier.weight(1.0f).padding(end = 16.dp, start = 16.dp)
+            modifier = Modifier
+                .weight(1.0f)
+                .padding(end = 16.dp, start = 16.dp)
         )
 
-        val checkedState = remember { mutableStateOf(checkedStateInit) }
+        var checkedState by rememberSaveable { mutableStateOf(checkedStateInit) }
+
         Switch(
-            checked = checkedState.value,
-            onCheckedChange = { checkedState.value = it },
+            checked = checkedState,
+            onCheckedChange = {
+                checkedState = it
+                onClickAction(checkedState)
+            },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = colorResource(R.color.colorWhite),
                 checkedTrackColor = colorResource(R.color.colorBlue),
                 uncheckedThumbColor = colorResource(R.color.colorWhite),
                 uncheckedTrackColor = colorResource(R.color.colorGray),
             ),
-            modifier = Modifier.clickable { onClickAction(checkedState.value) }
+        )
+    }
+}
+
+@Composable
+@Preview
+fun TextSwitchItem(
+    text: String = "Text",
+    textColorResId: Int = R.color.colorBlack,
+    backgroundColorResId: Int = R.color.textFieldBackgroundDefault,
+    checkedStateInit: Boolean = false,
+    onClickAction: (isOn: Boolean) -> Unit = {}
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+
+        Text(text = text,
+            style = Typography.body2,
+            color = colorResource(R.color.colorBlack),
+            modifier = Modifier
+                .weight(1.0f)
+                .padding(end = 16.dp, start = 16.dp)
+        )
+
+        var checkedState by rememberSaveable { mutableStateOf(checkedStateInit) }
+        
+        Switch(
+            checked = checkedState,
+            onCheckedChange = {
+                checkedState = it
+                onClickAction(checkedState)
+            },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = colorResource(R.color.colorWhite),
+                checkedTrackColor = colorResource(R.color.colorBlue),
+                uncheckedThumbColor = colorResource(R.color.colorWhite),
+                uncheckedTrackColor = colorResource(R.color.colorGray),
+            )
         )
     }
 }
