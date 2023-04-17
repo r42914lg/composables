@@ -24,6 +24,7 @@ import ru.dars.darsapp.ui.theme.Typography
 @Preview
 fun MandatoryTextEdit(
     modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
     missingValueBackgroundColorId: Int = R.color.textFieldBackgroundMissing,
     defaultBackgroundColorId: Int = R.color.textFieldBackgroundDefault,
     textColorId: Int = R.color.colorBlack,
@@ -38,6 +39,7 @@ fun MandatoryTextEdit(
     val focusManager = LocalFocusManager.current
 
     BasicTextField(
+        readOnly = readOnly,
         value = rText,
         onValueChange = {
             rText = it
@@ -80,6 +82,7 @@ fun MandatoryTextEdit(
 @Preview
 fun MandatoryPhoneEdit(
     modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
     missingValueBackgroundColorId: Int = R.color.textFieldBackgroundMissing,
     defaultBackgroundColorId: Int = R.color.textFieldBackgroundDefault,
     textColorId: Int = R.color.colorBlack,
@@ -94,6 +97,7 @@ fun MandatoryPhoneEdit(
     val focusManager = LocalFocusManager.current
 
     BasicTextField(
+        readOnly = readOnly,
         value = rText,
         onValueChange = {
             rText = it
